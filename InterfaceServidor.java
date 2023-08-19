@@ -120,6 +120,7 @@ public class InterfaceServidor extends JFrame implements ActionListener, Runnabl
                 Socket enviaDestinatario = new Socket(ip, 9090);
                 ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.GetOutputStream());
                 enviaReenvio.writeObject(paquete_recibido);
+                paqueteReenvio.close();
                 enviaDestinatario.close();
                 miSocket.close();
             }
