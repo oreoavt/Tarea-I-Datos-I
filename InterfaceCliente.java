@@ -134,7 +134,7 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
         }
         if (evento.getSource() == boton2) {
             try {
-                Socket socketClient = new Socket("192.168.1.17", 9999);
+                Socket socketClient = new Socket("172.18.127.1", 9999);
                 Paquetería datos = new Paquetería();
                 datos.setNick(nickname.getText()); // Utiliza nickname.getText() en lugar de nick.getNick()
                 datos.setIp(ip_user.getText()); // Utiliza ip_user.getText() en lugar de ip.getIp()
