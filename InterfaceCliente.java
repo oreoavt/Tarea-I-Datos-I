@@ -35,7 +35,7 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
 
     public void run() {
         try {
-            ServerSocket servidor_cliente = new ServverSocket(9090);
+            ServerSocket servidor_cliente = new ServerSocket(9090);
             Socket cliente;
             Paquetería paqueteRecibido;
             while (true) {
