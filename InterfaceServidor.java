@@ -127,6 +127,11 @@ public class InterfaceServidor extends JFrame implements ActionListener, Runnabl
                 message = paquete_recibido.getMessage();
 
                 areaTexto.append("\n" + nick + ": " + message + " para " + ip);
+
+                Socket enviaDestinatario = new Socket(ip, 9090);
+                ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.GetOutputStream());
+                enviaReenvio.writeObject(paquete_recibido);
+                enviaDestinatario.close();
                 miSocket.close();
             }
         } catch (IOException | ClassNotFoundException error) {

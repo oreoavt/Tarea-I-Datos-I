@@ -15,11 +15,12 @@ import java.awt.Insets;
 import java.awt.event.*;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.*;
 
-public class InterfaceCliente extends JFrame implements ActionListener {
+public class InterfaceCliente extends JFrame implements ActionListener, Runnable {
 
     private JTextField textfield;
     private JLabel label1;
@@ -31,6 +32,22 @@ public class InterfaceCliente extends JFrame implements ActionListener {
     private JTextField ip_user;
     JButton boton1;
     JButton boton2;
+
+    public void run() {
+        try {
+            ServerSocket servidor_cliente = new ServverSocket(9090);
+            Socket cliente;
+            Paquetería paqueteRecibido;
+            while (true) {
+                cliente = servidor_cliente.accept();
+                ObjectInputStream flujoEntrada = new ObjectInputStream(cliente.getInputStream);
+                paqueteRecibido = (Paquetería) flujoEntrada.readObject();
+                textfield.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMessage());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     /* se establece un constructor y se agrega etiqueta */
     public InterfaceCliente() {
@@ -105,6 +122,9 @@ public class InterfaceCliente extends JFrame implements ActionListener {
         label2.setForeground(Color.WHITE);
         label2.setFont(font);
         add(label2);
+
+        Thread mihilo = new Thread(this);
+        mihilo.start();
     }
 
     /* Eventos de los botones */
