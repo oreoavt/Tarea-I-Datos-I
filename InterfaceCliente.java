@@ -22,7 +22,7 @@ import java.net.*;
 
 public class InterfaceCliente extends JFrame implements ActionListener, Runnable {
 
-    private JTextField textfield;
+    private JTextArea textArea;
     private JLabel label1;
     private JLabel label2;
     private JLabel label3;
@@ -40,9 +40,9 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
             Paquetería paqueteRecibido;
             while (true) {
                 cliente = servidor_cliente.accept();
-                ObjectInputStream flujoEntrada = new ObjectInputStream(cliente.getInputStream);
+                ObjectInputStream flujoEntrada = new ObjectInputStream(cliente.getInputStream());
                 paqueteRecibido = (Paquetería) flujoEntrada.readObject();
-                textfield.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMessage());
+                chat_cliente.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMessage());
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -74,9 +74,9 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
         add(ip_user);
 
         // Se establece espacio para escribir el mensaje
-        textfield = new JTextField();
-        textfield.setBounds(73, 475, 240, 30);
-        add(textfield);
+        textArea = new JTextArea();
+        textArea.setBounds(73, 475, 240, 30);
+        add(textArea);
 
         // Se agrega el espacio para visualizar el chat
         chat_cliente = new JTextArea();
@@ -134,11 +134,11 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
         }
         if (evento.getSource() == boton2) {
             try {
-                Socket socketClient = new Socket("172.18.127.1", 9999);
+                Socket socketClient = new Socket("192.168.2.45", 9999);
                 Paquetería datos = new Paquetería();
                 datos.setNick(nickname.getText()); // Utiliza nickname.getText() en lugar de nick.getNick()
                 datos.setIp(ip_user.getText()); // Utiliza ip_user.getText() en lugar de ip.getIp()
-                datos.setMessage(textfield.getText());
+                datos.setMessage(textArea.getText());
                 ObjectOutputStream paquete_datos = new ObjectOutputStream(socketClient.getOutputStream());
 
                 paquete_datos.writeObject(datos);
