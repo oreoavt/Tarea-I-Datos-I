@@ -139,6 +139,8 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
                 datos.setNick(nickname.getText()); // Utiliza nickname.getText() en lugar de nick.getNick()
                 datos.setIp(ip_user.getText()); // Utiliza ip_user.getText() en lugar de ip.getIp()
                 datos.setMessage(textArea.getText());
+                chat_cliente.append("\n" + datos.getNick() + ": " + datos.getMessage());
+                
                 ObjectOutputStream paquete_datos = new ObjectOutputStream(socketClient.getOutputStream());
 
                 paquete_datos.writeObject(datos);
