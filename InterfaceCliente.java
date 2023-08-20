@@ -28,7 +28,7 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
     private JLabel label3;
     private JLabel label4;
     private JTextArea chat_cliente;
-    private JTextField nickname;
+    private JLabel nickname;
     private JTextField ip_user;
     JButton boton1;
     JButton boton2;
@@ -54,13 +54,18 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
         setLayout(null);
 
         // Se crea la instrucción que el usuario debe realizar
-        label3 = new JLabel("Username");
+        label3 = new JLabel("Username:");
         label3.setBounds(60, 40, 200, 30);
         add(label3);
 
         // Espacio para escribir el username
-        nickname = new JTextField();
-        nickname.setBounds(50, 65, 80, 30);
+        String nick_usuario = JOptionPane.showInputDialog("Enter your Nickname: ");
+
+        JLabel n_nick = new JLabel(nick_usuario);
+        n_nick.setBounds(60,60,200,30);
+        add(n_nick);
+        nickname = new JLabel();
+        nickname.setText(nick_usuario);
         add(nickname);
 
         // Se crea la instrucción que el usuario debe realizar
@@ -140,11 +145,13 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
                 datos.setIp(ip_user.getText()); // Utiliza ip_user.getText() en lugar de ip.getIp()
                 datos.setMessage(textArea.getText());
                 chat_cliente.append("\n" + datos.getNick() + ": " + datos.getMessage());
-                
+
                 ObjectOutputStream paquete_datos = new ObjectOutputStream(socketClient.getOutputStream());
 
                 paquete_datos.writeObject(datos);
                 socketClient.close();
+                /*Vaciar la barra de escritura */
+                textArea.setText("");
             } catch (UnknownHostException e1) {
                 e1.printStackTrace();
             } catch (IOException e1) {
