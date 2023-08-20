@@ -70,6 +70,17 @@ public class InterfaceServidor extends JFrame implements ActionListener, Runnabl
         label1.setFont(font);
         add(label1);
 
+        /*Se crea la etiqueta #2 "Servidor" */
+        Font font2 = new Font("Arial", Font.BOLD, 18);
+        label2 = new JLabel("Servidor");
+        label2.setBounds(0,44,400,18);
+        label2.setBackground(Color.LIGHT_GRAY);
+        label2.setOpaque(true);
+        label2.setHorizontalAlignment(SwingConstants.CENTER);
+        label2.setForeground(Color.BLACK);
+        label2.setFont(font2);
+        add(label2);
+
         /* Hilo del run() */
         Thread mihilo = new Thread(this);
         mihilo.start();
