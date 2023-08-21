@@ -169,11 +169,24 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
      */
     public void actionPerformed(ActionEvent evento) {
         if (evento.getSource() == boton1) {
-            // Si el evento proviene del botón1, se cierra la aplicación.
+            // Si el evento proviene del botón "<", se cierra la aplicación.
             System.exit(0);
         }
+        /**
+         * Si el evento es igual a ">>", entonces
+         * 
+         * @param socketClient Crea el client socket para conectar con el puerto e IP
+         *                     seleccionados.
+         * @param datos        Crea una isntancia de Paquetería para empaquetar los
+         *                     datos introducidos por el usuario
+         * @return setNick Configura el campo nick con el texto dentro de "nickname"
+         * @return setIp Configura el campo ip con el texto dentro de "ip_user"
+         * @return setMessage Configura el campo message con el texto dentro de
+         *         "textArea"
+         */
         if (evento.getSource() == boton2) {
             try {
+                // Crea el client socket para conectar con el puerto e IP seleccionados
                 Socket socketClient = new Socket(serverIP, 9999);
                 Paquetería datos = new Paquetería();
                 datos.setNick(nickname.getText());

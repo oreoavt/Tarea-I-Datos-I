@@ -1,12 +1,17 @@
 
-/*
-Instituto Tecnológico de Costa Rica
-Trabajo extraclase #1
-Implementación de un chat instantáneo
-Estudiantes: Bryan Monge y Emmanuel Calvo
-Profesor: Leonardo Araya
-Ingeniería en Computadores
-II Semestre 2023
+/**
+ * Instituto tecnológico de Costa Rica
+ * Curso: ALgoritmos y Estructura de Datos
+ * Trabajo extraclase #1 - Implementación de chat
+ * Estudiantes: Bryan Monge y Emmanuel Calvo
+ * Grupo #1
+ * Profesor: Leonardo Araya
+ * Ingeniería en Computadores
+ * Periodo II Semestre 2023
+ */
+
+/**
+ * Importación de librerías de diseño y comunicación vía Socket
  */
 import javax.swing.*;
 import javax.swing.*;
@@ -17,6 +22,14 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
+/**
+ * Definición de la clase que contiene la integración del diseño de la interfaz,
+ * y todos los elementos que la componen,
+ * además del comportamiento de los dos botones e instrcciones para el usuario
+ * disponibles en la interfaz,
+ * y el empaquetamiento del mensaje para ser mostrado a través del servidor
+ * hacia la computadora receptora
+ */
 public class InterfaceServidor extends JFrame implements ActionListener, Runnable {
     private JTextArea areaTexto;
     private JLabel label1;
@@ -70,10 +83,10 @@ public class InterfaceServidor extends JFrame implements ActionListener, Runnabl
         label1.setFont(font);
         add(label1);
 
-        /*Se crea la etiqueta #2 "Servidor" */
+        /* Se crea la etiqueta #2 "Servidor" */
         Font font2 = new Font("Arial", Font.BOLD, 18);
         label2 = new JLabel("Servidor");
-        label2.setBounds(0,44,400,18);
+        label2.setBounds(0, 44, 400, 18);
         label2.setBackground(Color.LIGHT_GRAY);
         label2.setOpaque(true);
         label2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -81,27 +94,42 @@ public class InterfaceServidor extends JFrame implements ActionListener, Runnabl
         label2.setFont(font2);
         add(label2);
 
-        /* Hilo del run() */
+        /**
+         * Hilo para la ejecución del método run de la instancia
+         * Implementado para ejecutar tareas en segundo plano y en paralelo con el envío
+         * de los mensajes, esto es, la comunicación constante de las interfaces de los
+         * usuarios con el servidor en un bucle infinito
+         * 
+         */
         Thread mihilo = new Thread(this);
         mihilo.start();
 
     }
 
-    /*
-     * Eventos de
-     * los botones
+    /**
+     * Maneja eventos generados por componentes de la interfaz de usuario
+     * 
+     * @param evento guarda la acción ejecutada por el usuario
      */
-
     public void actionPerformed(ActionEvent evento) {
         if (evento.getSource() == boton1) {
+            // Si el evento proviene del botón "<", se cierra la aplicación.
             System.exit(0);
+            // Linea que puede ser comentada. Testeo del funcionamiento correcto del botón
+            // de envío
         } else if (evento.getSource() == boton2) {
             System.out.print("Hola");
 
         }
     }
 
-    /* Se implementan las configuraciones de la interfaz */
+    /**
+     * Punto de entrada principal de la aplicación.
+     * 
+     * @param inferface1 Crea una instancia de la clase InterfaceCliente y configura
+     *                   su apariencia.
+     * 
+     */
     public static void main(String args[]) {
         InterfaceServidor interface1 = new InterfaceServidor();
         interface1.setBounds(0, 0, 400, 550);
@@ -110,7 +138,28 @@ public class InterfaceServidor extends JFrame implements ActionListener, Runnabl
         interface1.setResizable(false);
     }
 
-    /* Se implementa la escucha del servidor para recepción de mensajes */
+    /**
+     * Se implementa la escucha del servidor para recepción de mensajes.
+     * 
+     * @param servidor         Se establece la variable que conecta el servidor con
+     *                         el
+     *                         usuario a través del puerto seleccionado.
+     * @param nick             Dato tipo String que almacena el username introducido
+     *                         por el
+     *                         usuario
+     * @param ip               Dato tipo String que almacena el ip introducido por
+     *                         el
+     *                         usuario,cuya dirección pertenece al destinatario
+     * @param message          Dato tipo String que almacena el mensaje introducido
+     *                         por el
+     *                         usuario que será recibido por el otro extremo
+     *                         (receptor).
+     * @param miSocket         Crea el serverSocket en espera de conexiones
+     *                         entrantes
+     * @param paquete_datos    Crea un ObjectInputStream para leer los datos
+     *                         provenientes del socket
+     * @param paquete_recibido Lee los objetos desde el flujo de entrada
+     */
     public void run() {
         try {
             ServerSocket servidor = new ServerSocket(9999);
@@ -122,19 +171,32 @@ public class InterfaceServidor extends JFrame implements ActionListener, Runnabl
                 ObjectInputStream paquete_datos = new ObjectInputStream(miSocket.getInputStream());
                 paquete_recibido = (Paquetería) paquete_datos.readObject();
 
-                nick = paquete_recibido.getNick();
-                ip = paquete_recibido.getIp();
-                message = paquete_recibido.getMessage();
+                nick = paquete_recibido.getNick(); // Extrae el valor de "nick" de "paquete_recibido" y lo asigna a la
+                                                   // variable "nick"
+                ip = paquete_recibido.getIp(); // Extrae el valor de "ip" de "paquete_recibido" y lo asigna a la
+                                               // variable "ip"
+                message = paquete_recibido.getMessage(); // Extrae el valor de "message" de "paquete_recibido" y lo
+                                                         // asigna a la variable "message"
 
+                // Asigna la estructura que será mostrada en el area de texto en el servidor
                 areaTexto.append("\n" + nick + ": " + message + " para " + ip);
 
-                Socket enviaDestinatario = new Socket(ip, 9090);
+                Socket enviaDestinatario = new Socket(ip, 9090); // Crea el client socket e intenta conectar a dicho
+                                                                 // puerto
+                // Stream usado para enviar objetos sobre la red
                 ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
+                // Escribe el" paquete_recibido" objeto hacia el "paqueteReenvio". Serializa el
+                // objeto para enviarlo
                 paqueteReenvio.writeObject(paquete_recibido);
+                // Vacia los datos restantes y libera los recursos asociados con la transmisión.
                 paqueteReenvio.close();
+                // Termina la conexión apropiadamente para liberar recursos
                 enviaDestinatario.close();
+                // Limpia los recursos del servidor asociada con el manejo de los datos
+                // entrantes
                 miSocket.close();
             }
+            // Manejo de excepciones, se muestran al usuario
         } catch (IOException | ClassNotFoundException error) {
             error.printStackTrace();
         }
