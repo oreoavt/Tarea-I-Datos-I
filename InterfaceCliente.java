@@ -33,6 +33,8 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
     JButton boton1;
     JButton boton2;
 
+    private String serverIP;
+
     public void run() {
         try {
             ServerSocket servidor_cliente = new ServerSocket(9090);
@@ -57,6 +59,8 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
         label3 = new JLabel("Username:");
         label3.setBounds(60, 40, 200, 30);
         add(label3);
+
+        serverIP = JOptionPane.showInputDialog("Enter the Server IP Address: ");
 
         // Espacio para escribir el username
         String nick_usuario = JOptionPane.showInputDialog("Enter your Nickname: ");
@@ -139,7 +143,7 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
         }
         if (evento.getSource() == boton2) {
             try {
-                Socket socketClient = new Socket("192.168.2.45", 9999);
+                Socket socketClient = new Socket(serverIP, 9999);
                 Paquetería datos = new Paquetería();
                 datos.setNick(nickname.getText()); // Utiliza nickname.getText() en lugar de nick.getNick()
                 datos.setIp(ip_user.getText()); // Utiliza ip_user.getText() en lugar de ip.getIp()
