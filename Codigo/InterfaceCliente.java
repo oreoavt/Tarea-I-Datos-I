@@ -179,7 +179,7 @@ public class InterfaceCliente extends JFrame implements ActionListener, Runnable
          *                     seleccionados.
          * @param datos        Crea una isntancia de Paquetería para empaquetar los
          *                     datos introducidos por el usuario
-         * @return setNick Configura el campo nick con el texto dentro de "nickname"
+         * @param setNick      Configura el campo nick con el texto dentro de "nickname"
          * @return setIp Configura el campo ip con el texto dentro de "ip_user"
          * @return setMessage Configura el campo message con el texto dentro de
          *         "textArea"
